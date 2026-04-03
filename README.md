@@ -22,7 +22,7 @@ This project addresses the challenge of automated hand gesture recognition. It f
 
 ## 📁 Repository Structure
 * **`Dataset/`**: Contains the original, raw hand sign images (Sample Data).
-* **`Resizing_dataset4/`**: The target folder for processed data; contains images normalized to 400x400 pixels used for training.
+* **`Resizing_dataset/`**: The target folder for processed data; contains images normalized to 400x400 pixels used for training.
 * **`Resizing.ipynb`**: Script to automate image normalization and population of the `Resizing_dataset4` folder.
 * **`Transform_image_to_array.ipynb`**: Converts images to feature vectors, trains the KNN model, and outputs performance metrics.
 * **`matriz_konfuzaun_knn_output.png`**: The final Confusion Matrix showing prediction accuracy across all sign classes.
