@@ -1,29 +1,31 @@
 # 🤟 Hand Sign Classification — KNN
 
-*A Machine Learning system designed to recognize and classify Sign Language hand gestures (ASL) using the K-Nearest Neighbors (KNN) algorithm.*
+*A specialized Machine Learning system for recognizing and classifying Sign Language (ASL) hand gestures using Computer Vision and the K-Nearest Neighbors (KNN) algorithm.*
 
 ---
 
 ## 📖 Project Overview
-This project focuses on the automated recognition of hand signs. It transforms raw visual data (images of hand gestures) into mathematical arrays to train a model capable of predicting the correct alphabet or sign. By leveraging computer vision and the **K-Nearest Neighbors (KNN)** algorithm, the system identifies patterns in hand shapes to bridge the communication gap for the deaf and hard-of-hearing community.
+This project addresses the challenge of automated hand gesture recognition. It follows a complete data science pipeline: from raw image acquisition to mathematical feature extraction and final classification. The goal is to accurately predict hand signs by analyzing the geometric and pixel-intensity patterns of normalized gesture images.
 
 ## 🚀 Key Features
-* **Sign Language Preprocessing:** Standardizes hand gesture images to a uniform 400x400 resolution for consistency.
-* **Array Transformation:** Converts complex RGB visual data into structured NumPy arrays for mathematical analysis.
-* **KNN Classification:** Uses proximity-based learning to classify signs based on their similarity to known training examples.
-* **Performance Analysis:** Features a detailed **Confusion Matrix (Matriz Konfuzaun)** in Tetum to evaluate the model's accuracy across different hand signs.
+* **Custom Preprocessing:** Batch resizing of raw hand signs to a standard 400x400 resolution.
+* **Feature Engineering:** Normalization of 8-bit RGB pixel data into a 0–1 floating-point range for improved model convergence.
+* **Proximity-Based Learning:** Implementation of the KNN algorithm to classify gestures based on spatial similarity.
+* **Visual Evaluation:** Automated generation of a Confusion Matrix (**Matriz Konfuzaun**) in Tetum to identify model strengths and weaknesses.
 
 ## 🛠️ Tech Stack
-* **Language:** Python 3.x
-* **Core Libraries:** * `OpenCV (cv2)`: Image processing and resizing.
-  * `NumPy`: Numerical matrix operations.
-  * `Scikit-Learn`: KNN Model implementation and metrics.
-  * `Seaborn/Matplotlib`: Confusion matrix visualization.
+* **Language:** Python 3.9+
+* **Image Processing:** OpenCV (`cv2`)
+* **Mathematical Operations:** NumPy & Pandas
+* **Machine Learning:** Scikit-Learn
+* **Visualization:** Seaborn & Matplotlib
 
 ## 📁 Repository Structure
-* **`Resizing.ipynb`**: Handles the batch processing and resizing of raw hand sign images.
-* **`Transform_image_to_array.ipynb`**: Converts images to numerical features, trains the KNN model, and generates the confusion matrix.
-* **`matriz_konfuzaun_knn_output.png`**: The final evaluation result showing the model's performance on sign classification.
+* **`Dataset/`**: Contains the original, raw hand sign images (Sample Data).
+* **`Resizing_dataset4/`**: The target folder for processed data; contains images normalized to 400x400 pixels used for training.
+* **`Resizing.ipynb`**: Script to automate image normalization and population of the `Resizing_dataset4` folder.
+* **`Transform_image_to_array.ipynb`**: Converts images to feature vectors, trains the KNN model, and outputs performance metrics.
+* **`matriz_konfuzaun_knn_output.png`**: The final Confusion Matrix showing prediction accuracy across all sign classes.
 
 ---
 
@@ -31,41 +33,40 @@ This project focuses on the automated recognition of hand signs. It transforms r
 
 This machine learning model operates based on three primary mathematical steps:
 
-### 1. Data Normalization (Scaling)
-To ensure that light intensity doesn't bias the model, pixel values are scaled from the range $[0, 255]$ to a range of $[0, 1]$.
+### 1. Min-Max Normalization
+To ensure that lighting conditions do not disproportionately affect the distance calculation, pixel values are scaled from $[0, 255]$ to a range of $[0, 1]$.
 $$X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}} \implies X_{norm} = \frac{Pixel}{255}$$
 
-### 2. Euclidean Distance (Similarity Measure)
-The "Machine Learning" logic happens by calculating how "close" a new hand sign is to the existing signs in the database. We use the **Euclidean Distance** formula:
+### 2. Euclidean Distance (The Similarity Metric)
+The model classifies new hand signs by calculating the straight-line distance between the unknown sign vector ($p$) and all known training vectors ($q$) in an $n$-dimensional space.
 $$d(p, q) = \sqrt{\sum_{i=1}^{n} (q_i - p_i)^2}$$
-*Where $p$ and $q$ are the pixel vectors of two different hand signs.*
 
-### 3. K-Nearest Neighbors Logic
-The classification $Y$ for a new hand sign is determined by the majority vote of its $K$ closest neighbors:
-$$\hat{Y} = \text{mode}\{y_i \mid i \in N_k(x)\}$$
+### 3. K-Nearest Neighbors Decision Rule
+The predicted sign $\hat{Y}$ is determined by the most frequent class (mode) among the $K$ closest neighbors.
+$$\hat{Y} = \text{argmax} \sum_{i \in N_k(x)} I(y_i = j)$$
 
 ---
 
 ## 📊 Evaluation Results
 
-The model performance is visualized through a **Confusion Matrix**, which allows us to see exactly which signs are being recognized correctly and which ones are being confused.
+The **Matriz Konfuzaun** below shows the model's performance. The diagonal line represents correct predictions, while outliers indicate signs with similar visual patterns that the model might confuse.
 
 ![Matriz Konfuzaun](matriz_konfuzaun_knn_output.png)
-*Figure 1: Accuracy visualization for Hand Sign Classification (Tetum Version).*
+*Figure 1: Accuracy visualization for Hand Sign Classification (Tetum Annotation).*
 
-### Performance Summary
-| Metric | Formula | Description |
+### Core Metrics
+| Metric | Formula | Goal |
 | :--- | :--- | :--- |
-| **Accuracy** | $\frac{TP+TN}{Total}$ | Overall correctness of the sign recognition. |
-| **Precision** | $\frac{TP}{TP+FP}$ | How many "Sign A" predictions were actually "Sign A". |
-| **Recall** | $\frac{TP}{TP+FN}$ | How many of the actual "Sign A" gestures were caught by the model. |
+| **Accuracy** | $\frac{TP+TN}{\text{Total}}$ | Maximize overall correct sign detection. |
+| **Recall** | $\frac{TP}{TP+FN}$ | Minimize "missed" signs (False Negatives). |
 
-## ⚙️ How to Run
-1. Install dependencies: `pip install opencv-python numpy scikit-learn seaborn matplotlib`
-2. Run `Resizing.ipynb` to prepare your dataset.
-3. Run `Transform_image_to_array.ipynb` to train and test the KNN classifier.
+## ⚙️ Installation & Usage
+1. **Prepare Folders**: Place your raw images in `/Dataset`.
+2. **Install Deps**: `pip install opencv-python numpy scikit-learn seaborn matplotlib`
+3. **Preprocess**: Run `Resizing.ipynb` to generate the `/Resizing_dataset4` folder.
+4. **Train & Test**: Run `Transform_image_to_array.ipynb` to view the classification results.
 
 ---
 **Author:** Edmilson Fabio Valente  
-**Department:** Informatic Engineering — UNTL  
-**Focus:** Computer Vision & Machine Learning
+**Affiliation:** UNTL — Faculty of Engineering, Science and Technology (FECT)  
+**Course:** Informatic Engineering
