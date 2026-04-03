@@ -70,3 +70,8 @@ The **Matriz Konfuzaun** below shows the model's performance. The diagonal line 
 **Author:** Edmilson Fabio Valente  
 **Affiliation:** UNTL — Faculty of Engineering, Science and Technology (FECT)  
 **Course:** Informatic Engineering
+
+---
+## ⚖️ License
+This project is licensed under the MIT License. 
+For the full legal text, please visit: [Official License Link](https://github.com/Ediko-eng/SIGNLANGUAGE-CLASSIFICATION/blob/main/LICENSE)
